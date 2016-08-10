@@ -17,6 +17,15 @@
             var starfield = new Starfield();
             starfield.initialise(container);
             starfield.start();
+
+        var myAudio = document.createElement('audio');
+ 		myAudio.setAttribute('src', 'snd_music.mp3');
+ 		myAudio.play()
+ 		myAudio.addEventListener('ended', function() {
+    	this.currentTime = 0;
+   		this.play();
+ 		}, false);
+ 		myAudio.play();
         </script>
 </body>
 </html>
