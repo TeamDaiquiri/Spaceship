@@ -29,6 +29,6 @@
                 margin-right: auto;
             }
 
-            #asteroid-img {
+            #ship, #shoot {
                 display: none;
             }
