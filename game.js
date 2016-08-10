@@ -31,10 +31,6 @@ Game.start = function () {
     Game.asteroidSprite.src = "asteroid.png";
     Game.shipSprite = new Image();
     Game.shipSprite.src = "ship1.png";
-    Game.backgroundMusic = new Audio();
-    Game.backgroundMusic.src = "snd_music.mp3";
-    Game.backgroundMusic.volume = 0.4;
-    Game.backgroundMusic.play();
     window.setTimeout(Game.mainLoop, 500);
 };
 
