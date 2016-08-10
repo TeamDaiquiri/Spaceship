@@ -1,12 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>HandleMouse</title>
+<title>Telerik Invaders</title>
 <script src="game.js"></script>
+<link rel="stylesheet" href="./styles/main-style.css">
 </head>
 <body>
-<div id="gameArea">
-    <canvas id="gameCanvas" width="1600" height="900"></canvas>
-</div>
+<div id="starfield"></div>
+<div id="gamecontainer">
+        <canvas id="gameCanvas"></canvas>
+        </div>
+        <script src="starfield.js"></script>
+        <script> 
+        //starfield
+        var container = document.getElementById('starfield');
+            var starfield = new Starfield();
+            starfield.initialise(container);
+            starfield.start();
+        </script>
 </body>
 </html>
