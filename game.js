@@ -18,7 +18,7 @@ var Game = {
     shipRotation : 0,
     backgroundMusic : undefined
 };
-
+var firstCanvas = document.getElementsById("gameCanvas");
 Game.start = function () {
     Game.canvas = document.getElementById("gameCanvas");
     Game.canvasContext = Game.canvas.getContext("2d");
@@ -26,11 +26,11 @@ Game.start = function () {
     document.onmousemove = handleMouseMove;
 
     Game.bgSprite = new Image();
-    Game.bgSprite.src = "stars.jpg";
+    Game.bgSprite.src = "./imgs/stars.jpg";
     Game.asteroidSprite = new Image();
-    Game.asteroidSprite.src = "asteroid.png";
+    Game.asteroidSprite.src = "./imgs/asteroid.png";
     Game.shipSprite = new Image();
-    Game.shipSprite.src = "ship1.png";
+    Game.shipSprite.src = "./imgs/ship1.png";
     Game.backgroundMusic = new Audio();
     Game.backgroundMusic.src = "snd_music.mp3";
     Game.backgroundMusic.volume = 0.4;
@@ -40,6 +40,8 @@ Game.start = function () {
 
 document.addEventListener( 'DOMContentLoaded', Game.start);
 
+
+//clearCanvas - shoud take parameters - context and coordinates
 Game.clearCanvas = function () {
     Game.canvasContext.clearRect(0, 0, Game.canvas.width, Game.canvas.height);
 };
@@ -67,6 +69,31 @@ Game.update = function () {
   var adjacent = Game.mousePosition.x - Game.shipPosition.x;
   Game.shipRotation = Math.atan2(opposite, adjacent);
 };
+
+ //var bulletImg = document.getElementById('asteroid-img');
+function createBullet(offsetY) {
+       // var bulletSprite = createSprite({
+       //     spritesheet: bulletImg,
+       //     context: firstCanvas,
+       //     width: bulletImg.width / 18,
+       //     height: bulletImg.height,
+       //     numberOfFrames: 1,
+       //     loopTicksPerFrame: 5
+       // });
+
+        var bulletBody = createPhysicalBody({
+           x:10,
+           y: 10,
+            speed: 1,
+            width: bulletImg.width,
+            height: bulletImg.height
+        });
+
+        return {
+        //    sprite: bulletSprite,
+            body: bulletBody
+        };
+}
 
 Game.draw = function () {
   Game.clearCanvas();
