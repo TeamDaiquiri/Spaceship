@@ -74,30 +74,58 @@ Game.update = function () {
   Game.shipRotation = Math.atan2(opposite, adjacent);
 };
 
- //var bulletImg = document.getElementById('asteroid-img');
-function createBullet(offsetY) {
-       // var bulletSprite = createSprite({
-       //     spritesheet: bulletImg,
-       //     context: firstCanvas,
-       //     width: bulletImg.width / 18,
-       //     height: bulletImg.height,
-       //     numberOfFrames: 1,
-       //     loopTicksPerFrame: 5
-       // });
+var shoot = document.getElementById('shoot');
+function createShoot(offsetY) {
+        var shootSprite = createSprite({
+            spritesheet: shoot,
+            context: firstCanvas,
+            width: shoot.width / 2,
+            height: shoot.height / 3,
+            numberOfFrames: 3,
+            loopTicksPerFrame: 5
+        });
 
-        var bulletBody = createPhysicalBody({
-           x:10,
-           y: 10,
+        var shootBody = createPhysicalBody({
+            x:10,
+            y: 10,
             speed: 1,
-            width: bulletImg.width,
-            height: bulletImg.height
+            width: shoot.width / 2,
+            height: shoot.height / 3
         });
 
         return {
-        //    sprite: bulletSprite,
-            body: bulletBody
+            sprite: shootSprite,
+            body: shootBody
         };
 }
+
+var ship = document.getElementById('ship');
+function createShip(offsetY) {
+        var shipSprite = createSprite({
+            spritesheet: ship,
+            context: firstCanvas,
+            width: ship.width,
+            height: ship.height / 3,
+            numberOfFrames: 3,
+            loopTicksPerFrame: 5
+        });
+
+        var shipBody = createPhysicalBody({
+            x:100,
+            y: 100,
+            speed: 1,
+            width: ship.width,
+            height: ship.height / 3
+        });
+
+        return {
+            sprite: shipSprite,
+            body: shipBody
+        };
+}
+
+createShip();
+createShoot();
 
 Game.draw = function () {
   Game.clearCanvas();
