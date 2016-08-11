@@ -1,4 +1,4 @@
-function createShip(ctx, image, WIDTH, HEIGHT) {
+function createShip(ctx, image, WIDTH, HEIGHT, playerSpeed) {
 
   'use strict';
 
@@ -17,15 +17,15 @@ function createShip(ctx, image, WIDTH, HEIGHT) {
     loopTicksPerFrame: 25,
   });
 
-  var singleShipWidth = shipObject.width/shipObject.colsCount,
-      singleShipHeight = shipObject.height/shipObject.rowsCount,
-      shipStartX = WIDTH/2 - singleShipWidth/2,
+  var singleShipWidth = shipObject.width / shipObject.colsCount,
+      singleShipHeight = shipObject.height / shipObject.rowsCount,
+      shipStartX = WIDTH / 2 - singleShipWidth / 2,
       shipStartY = HEIGHT - singleShipHeight - 10;
 
   var shipBody = createPhysicalBody({
     x: shipStartX,
     y: shipStartY,
-    speed: 7,
+    speed: playerSpeed,
     width: singleShipWidth,
     height: singleShipHeight
   });

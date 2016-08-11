@@ -1,4 +1,4 @@
-function createEnemy(ctx, image, WIDTH, HEIGHT) {
+function createEnemy(ctx, image, xCoord, yCoord) {
 
   'use strict';
 
@@ -15,14 +15,12 @@ function createEnemy(ctx, image, WIDTH, HEIGHT) {
     loopTicksPerFrame: 25,
   });
 
-  var singleEnemyWidth = enemy.width/enemy.colsCount,
-      singleEnemyHeight = enemy.height/enemy.rowsCount,
-      enemyStartX = WIDTH/2,
-      enemyStartY = 10;
+  var singleEnemyWidth = enemyObject.width/enemyObject.colsCount,
+      singleEnemyHeight = enemyObject.height/enemyObject.rowsCount;
 
   var enemyBody = createPhysicalBody({
-    x: enemyStartX,
-    y: enemyStartY,
+    x: xCoord,
+    y: yCoord,
     speed: 1,
     width: singleEnemyWidth,
     height: singleEnemyHeight

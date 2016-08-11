@@ -3,7 +3,7 @@ function createPhysicalBody(options) {
   'use strict';
 
   function move(delta) {
-      var self = this;
+      var self = this,
       lastCoordinates = {x: self.x, y: self.y};
 
       self.x += (self.speed * delta.x);

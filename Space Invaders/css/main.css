@@ -2,6 +2,10 @@ canvas {
     position: absolute;
 }
 
+#bullet-canvas {
+  z-index: 30;
+}
+
 #enemy-canvas {
   z-index: 20;
 }
