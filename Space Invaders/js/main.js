@@ -1,8 +1,8 @@
 window.addEventListener('load', function() {
 
     'use strict';
-    const WIDTH = 800,
-        HEIGHT = 600,
+    const WIDTH = 1300,
+        HEIGHT = 700,
         dirDeltas = [{
             "x": -3,
             "y": 0
@@ -51,7 +51,7 @@ window.addEventListener('load', function() {
 
     function GenerateEnemy(enemies, count) {
         var offset = 1.5,
-            boundOfRow = Math.floor((enemyCanvas.height / 2) / (offset * enemyImg.height)),
+            boundOfRow = Math.floor((enemyCanvas.height * 2 / 3) / (offset * enemyImg.height)),
             boundCol = Math.floor(enemyCanvas.width / (offset * enemyImg.width)),
             generated = 0;
 
@@ -165,7 +165,7 @@ window.addEventListener('load', function() {
                 y: item.bulletBody.y
             }, lastBullet, 2);
 
-            if (CheckBounds(item.bulletBody.x, item.bulletBody.y, item.bulletBody.width, item.bulletBody.height) || (item.bulletBody.collisionWith(ship.shipBody))) {
+            if (CheckBounds(item.bulletBody.x, item.bulletBody.y, item.bulletBody.width, item.bulletBody.height)) {
               
                 bulletContext.clearRect(
                     item.bulletBody.x,
@@ -176,6 +176,15 @@ window.addEventListener('load', function() {
                 enemyBullets.splice(index, 1);
                 // } else if (item.bulletBody.collisionWith(ship.shipBody)) {
                 //   enemyBullets.splice(index, 1);
+            }else if ((item.bulletBody.collisionWith(ship.shipBody))) {
+                 bulletContext.clearRect(
+                    item.bulletBody.x,
+                    item.bulletBody.y,
+                    item.bulletBody.width + 20,
+                    item.bulletBody.height + 10
+                );
+                enemyBullets.splice(index, 1);
+                ship.shipBody.health -= 10;
             }
         });
     }
@@ -185,9 +194,15 @@ window.addEventListener('load', function() {
             var offset = 5;
             var prevEnemyPosition = item.enemyBody.move(dirDeltas[randomGeneratedNumber]);
 
-            if (CheckBounds(item.enemyBody.x, item.enemyBody.y, item.enemyBody.width, item.enemyBody.height) || CheckFriendlyCollision(enemies, item)) {
+            if (CheckBounds(item.enemyBody.x, item.enemyBody.y, item.enemyBody.width, item.enemyBody.height) ||
+                                                                         CheckFriendlyCollision(enemies, item) ||
+                                                                        item.enemyBody.collisionWith(ship.shipBody)) {
              
                 prevEnemyPosition = item.enemyBody.move(dirDeltas[getOpositeMovement(randomGeneratedNumber)]);
+            }
+
+            if (item.enemyBody.collisionWith(ship.shipBody)) {
+                ship.shipBody.health -= 10;
             }
 
             item.enemyObject.update();
@@ -212,6 +227,11 @@ window.addEventListener('load', function() {
         }
     }
 
+    function checkIsAlive(player) {
+        if (player.shipBody.health <= 0) {
+            console.log("Loser");
+        }
+    }
 
     var lastShipLocation = { x: ship.shipBody.x, y: ship.shipBody.y };
     // var lastEnemyLocation = {x: enemy.enemyBody.x, y: enemy.enemyBody.y};
@@ -244,6 +264,7 @@ window.addEventListener('load', function() {
 
         EnemyInteraction(enemies);
 
+        checkIsAlive(ship);
         if (enemies.length === 0) {
             enemyCount += 1;
             GenerateEnemy(enemies, enemyCount);
@@ -258,6 +279,7 @@ window.addEventListener('load', function() {
         if ((37 <= ev.keyCode) && (ev.keyCode <= 40)) {
             lastShipLocation = ship.shipBody.move(dirDeltas[ev.keyCode - 37]);
             ship.shipObject.update();
+            shipContext.clearRect(lastShipLocation.x - offset , lastShipLocation.y - offset , ship.shipBody.width + 2 * offset, ship.shipBody.height + 2 * offset);
         } else if (ev.keyCode === 32) {
             //var bullet = createBullet(ship.shipBody.x + offset, myBody.y + offset);
             var shipBullet = createBullet(bulletContext, bulletImg, ship.shipBody.x + 5 * offset, ship.shipBody.y + offset);
