@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+      <meta charset="UTF-8">
+      <title>Space Invaders</title>
+      <link rel="stylesheet" href="./css/main.css">
+  </head>
+  <body>
+      <canvas id="ship-canvas"></canvas>
+      <canvas id="enemy-canvas"></canvas>
+      <canvas id="background-canvas"></canvas>
+
+      <img class="sprite-image" src="./imgs/enemy.png" id="enemy" />
+      <img class="sprite-image" src="./imgs/ship.png" id="ship" />
+      <img class="sprite-image" src="./imgs/bulletG.png" id="bullet" />
+
+      <script src="./js/common/game-object.js"></script>
+      <script src="./js/common/physical-body.js"></script>
+      <script src="./js/common/create-canvas.js"></script>
+      <script src="./js/objects/ship.js"></script>
+      <script src="./js/objects/enemy.js"></script>
+      <script src="./js/objects/bullet.js"></script>
+      <script src="./js/main.js"></script>
+  </body>
+</html>

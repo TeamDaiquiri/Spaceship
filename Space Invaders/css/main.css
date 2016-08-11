@@ -1,0 +1,20 @@
+canvas {
+    position: absolute;
+}
+
+#enemy-canvas {
+  z-index: 20;
+}
+
+#ship-canvas {
+    z-index: 10
+}
+
+#background-canvas {
+    z-index: 1;
+    background-color: #000;
+}
+
+.sprite-image {
+    display: none;
+}
