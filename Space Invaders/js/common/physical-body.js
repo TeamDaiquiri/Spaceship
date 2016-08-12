@@ -35,7 +35,7 @@ function createPhysicalBody(options) {
     height: options.height,
     move: move,
     collisionWith: collisionWith,
-    health: 100
+    health: 1500
   };
 
   return physicalBody;
