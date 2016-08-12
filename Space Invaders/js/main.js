@@ -279,12 +279,18 @@ window.addEventListener('load', function() {
         if (!checkIsAlive(ship)) {
             return;
         }
-
+        if (killCount === 20) {
+        shipContext.drawImage(
+                    document.getElementById('win'),
+                    0,
+                    0
+                );         
+                return false;
+          }
         if (enemies.length === 0) {
             enemyCount += 1;
             GenerateEnemy(enemies, enemyCount);
         }
-
 
 
         window.requestAnimationFrame(gameLoop);
