@@ -2,29 +2,39 @@ window.addEventListener('load', function() {
 
     'use strict';
 
-    const WIDTH = 1200,
-          HEIGHT = 700,
-          dirDeltas = [{
-              "x": -3,
-              "y": 0
-          }, {
-              "x": 0,
-              "y": -3
-          }, {
-              "x": +3,
-              "y": 0
-          }, {
-              "x": 0,
-              "y": +3
-          }];
+    const WIDTH = 1425,
+        HEIGHT = 675,
+        dirDeltas = [{
+            "x": -3,
+            "y": 0
+        }, {
+            "x": 0,
+            "y": -3
+        }, {
+            "x": +3,
+            "y": 0
+        }, {
+            "x": 0,
+            "y": +3
+        }];
 
     function getRandomNumber(min, max) {
         return Math.floor(Math.random() * (max - min) + min);
     }
 
-    var bgCanvas = createCanvas('background-canvas', WIDTH, HEIGHT),
-        bgContext = bgCanvas.getContext('2d');
+     var backgroundCanvas = document.getElementById('background-canvas'),
+        context = backgroundCanvas.getContext('2d'),
+        backgroundImg = document.getElementById('background');
 
+        backgroundCanvas.height = HEIGHT;
+         backgroundCanvas.width = WIDTH;
+
+         context.drawImage(
+            backgroundImg,
+            0,
+            0
+        );
+   
     var shipCanvas = createCanvas('ship-canvas', WIDTH, HEIGHT),
         shipContext = shipCanvas.getContext('2d'),
         shipImg = document.getElementById('ship');
@@ -34,7 +44,8 @@ window.addEventListener('load', function() {
         enemyImg = document.getElementById('enemy'),
         randomGeneratedNumber = 0,
         loopIterations = 0,
-        enemyCount = 2;
+        enemyCount = 2,
+        killCount = 0;
 
     var bulletCanvas = createCanvas('bullet-canvas', WIDTH, HEIGHT),
         bulletContext = bulletCanvas.getContext('2d'),
@@ -42,7 +53,7 @@ window.addEventListener('load', function() {
         enemyBulletImg = document.getElementById('enemy-bullet');
 
     var shipSpeed = 7,
-       ship = createShip(shipContext, shipImg, WIDTH, HEIGHT, shipSpeed);
+        ship = createShip(shipContext, shipImg, WIDTH, HEIGHT, shipSpeed);
 
     var shipBullets = [],
         enemies = [],
@@ -62,10 +73,10 @@ window.addEventListener('load', function() {
             for (var col = 0; col < boundCol; col += 1) {
                 if (getRandomNumber(0, 2)) {
                     enemies.push(
-                      createEnemy(enemyContext,
-                                  enemyImg,
-                                  col * (offset * enemyImg.width),
-                                  row * (offset * enemyImg.height)));
+                        createEnemy(enemyContext,
+                            enemyImg,
+                            col * (offset * enemyImg.width),
+                            row * (offset * enemyImg.height)));
 
                     if ((generated += 1) > count) {
                         return;
@@ -144,6 +155,7 @@ window.addEventListener('load', function() {
                         item.bulletBody.width + offsetWidth,
                         item.bulletBody.height + offsetHeight
                     );
+                    killCount += 1;
                     break;
                 }
             }
@@ -171,7 +183,7 @@ window.addEventListener('load', function() {
             }, lastBullet, 2);
 
             if (CheckBounds(item.bulletBody.x, item.bulletBody.y,
-                            item.bulletBody.width, item.bulletBody.height) ||
+                    item.bulletBody.width, item.bulletBody.height) ||
                 (item.bulletBody.collisionWith(ship.shipBody))) {
 
                 bulletContext.clearRect(
@@ -182,6 +194,8 @@ window.addEventListener('load', function() {
                 );
 
                 enemyBullets.splice(index, 1);
+            }
+            if ((item.bulletBody.collisionWith(ship.shipBody))) {
                 ship.shipBody.health -= 10;
             }
         });
@@ -193,7 +207,7 @@ window.addEventListener('load', function() {
                 prevEnemyPosition = item.enemyBody.move(dirDeltas[randomGeneratedNumber]);
 
             if (CheckBounds(item.enemyBody.x, item.enemyBody.y,
-                            item.enemyBody.width, item.enemyBody.height) ||
+                    item.enemyBody.width, item.enemyBody.height) ||
                 CheckFriendlyCollision(enemies, item) ||
                 item.enemyBody.collisionWith(ship.shipBody)) {
 
@@ -201,7 +215,7 @@ window.addEventListener('load', function() {
             }
 
             if (item.enemyBody.collisionWith(ship.shipBody)) {
-                ship.shipBody.health -= 10;
+                ship.shipBody.health -= 1;
             }
 
             item.enemyObject.update();
@@ -212,10 +226,10 @@ window.addEventListener('load', function() {
 
             if (getRandomNumber(0, 110) === 0) {
                 enemyBullets.push(
-                  createBullet(bulletContext,
-                               enemyBulletImg,
-                               item.enemyBody.x + offset,
-                               item.enemyBody.y + offset));
+                    createBullet(bulletContext,
+                        enemyBulletImg,
+                        item.enemyBody.x + offset,
+                        item.enemyBody.y + offset));
             }
         });
     }
@@ -230,9 +244,19 @@ window.addEventListener('load', function() {
 
     function checkIsAlive(player) {
         if (player.shipBody.health <= 0) {
-            console.log("Loser");
-            //results.innerHTML("You LOOSE!")
+
+                shipContext.drawImage(
+                    document.getElementById('gameover'),
+                    0,
+                    0
+                );         
+                return false;
+
         }
+        playerHealth.innerHTML = ship.shipBody.health;
+        hits.innerHTML = killCount;
+        return true;
+
     }
 
     var lastShipLocation = { x: ship.shipBody.x, y: ship.shipBody.y };
@@ -252,15 +276,16 @@ window.addEventListener('load', function() {
 
         EnemyInteraction(enemies);
 
-        checkIsAlive(ship);
+        if (!checkIsAlive(ship)) {
+            return;
+        }
 
         if (enemies.length === 0) {
             enemyCount += 1;
             GenerateEnemy(enemies, enemyCount);
         }
 
-        playerHealth.innerHTML = ship.shipBody.health;
-        hits.innerHTML = enemies.length;
+
 
         window.requestAnimationFrame(gameLoop);
     }
@@ -279,7 +304,7 @@ window.addEventListener('load', function() {
     });
 
     document.body.addEventListener('keyup', function(ev) {
-         ship.shipObject.restart();
+        ship.shipObject.restart();
     });
 
     gameLoop();

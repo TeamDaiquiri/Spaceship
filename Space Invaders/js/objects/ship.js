@@ -2,6 +2,8 @@ function createShip(ctx, image, WIDTH, HEIGHT, playerSpeed) {
 
   'use strict';
 
+  //var self = this;
+
   var shipObject = createGameObject({
     spritesheet: image,
     context: ctx,
