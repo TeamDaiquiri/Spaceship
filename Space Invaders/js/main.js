@@ -1,21 +1,22 @@
 window.addEventListener('load', function() {
 
     'use strict';
-    const WIDTH = 1300,
-        HEIGHT = 700,
-        dirDeltas = [{
-            "x": -3,
-            "y": 0
-        }, {
-            "x": 0,
-            "y": -3
-        }, {
-            "x": +3,
-            "y": 0
-        }, {
-            "x": 0,
-            "y": +3
-        }];
+
+    const WIDTH = 1200,
+          HEIGHT = 700,
+          dirDeltas = [{
+              "x": -3,
+              "y": 0
+          }, {
+              "x": 0,
+              "y": -3
+          }, {
+              "x": +3,
+              "y": 0
+          }, {
+              "x": 0,
+              "y": +3
+          }];
 
     function getRandomNumber(min, max) {
         return Math.floor(Math.random() * (max - min) + min);
@@ -40,27 +41,31 @@ window.addEventListener('load', function() {
         bulletImg = document.getElementById('bullet'),
         enemyBulletImg = document.getElementById('enemy-bullet');
 
-        var shipSpeed = 7,
-       ship = createShip(shipContext, shipImg, WIDTH, HEIGHT,shipSpeed);
-    // var enemy = createEnemy(enemyContext, enemyImg, WIDTH, HEIGHT);
-    // var bullet = createBullet(bulletContext, bulletImg, 150, 100);
+    var shipSpeed = 7,
+       ship = createShip(shipContext, shipImg, WIDTH, HEIGHT, shipSpeed);
 
     var shipBullets = [],
         enemies = [],
         enemyBullets = [];
 
+    var playerHealth = document.getElementById('health'),
+        hittedEnemies = document.getElementById('hits'),
+        results = document.getElementById('results');
+
     function GenerateEnemy(enemies, count) {
         var offset = 1.5,
-            boundOfRow = Math.floor((enemyCanvas.height * 2 / 3) / (offset * enemyImg.height)),
+            boundOfRow = Math.floor((enemyCanvas.height / 2) / (offset * enemyImg.height)),
             boundCol = Math.floor(enemyCanvas.width / (offset * enemyImg.width)),
             generated = 0;
 
         for (var row = 0; row < boundOfRow; row += 1) {
             for (var col = 0; col < boundCol; col += 1) {
                 if (getRandomNumber(0, 2)) {
-                    enemies.push(createEnemy(enemyContext, enemyImg,
-                        col * (offset * enemyImg.width),
-                        row * (offset * enemyImg.height)));
+                    enemies.push(
+                      createEnemy(enemyContext,
+                                  enemyImg,
+                                  col * (offset * enemyImg.width),
+                                  row * (offset * enemyImg.height)));
 
                     if ((generated += 1) > count) {
                         return;
@@ -71,7 +76,7 @@ window.addEventListener('load', function() {
     }
 
     function CheckBounds(x, y, itemWidth, itemHeight) {
-        if ((x < 0) ||
+        if ((x <= 0) ||
             (x + itemWidth >= WIDTH) ||
             (y <= 0) ||
             (y + itemHeight >= HEIGHT)) {
@@ -124,7 +129,7 @@ window.addEventListener('load', function() {
                 var el = enemies[i].enemyBody;
 
                 if (item.bulletBody.collisionWith(el)) {
-                    console.log(enemies.length);
+                    //console.log(enemies.length);
                     enemies.splice(i, 1);
                     bullets.splice(index, 1);
                     enemyContext.clearRect(
@@ -165,24 +170,17 @@ window.addEventListener('load', function() {
                 y: item.bulletBody.y
             }, lastBullet, 2);
 
-            if (CheckBounds(item.bulletBody.x, item.bulletBody.y, item.bulletBody.width, item.bulletBody.height)) {
-              
+            if (CheckBounds(item.bulletBody.x, item.bulletBody.y,
+                            item.bulletBody.width, item.bulletBody.height) ||
+                (item.bulletBody.collisionWith(ship.shipBody))) {
+
                 bulletContext.clearRect(
-                    item.bulletBody.x,
-                    item.bulletBody.y,
-                    item.bulletBody.width + 20,
-                    item.bulletBody.height + 10
+                    item.bulletBody.x - 3,
+                    item.bulletBody.y - 3,
+                    item.bulletBody.width + 6,
+                    item.bulletBody.height + 6
                 );
-                enemyBullets.splice(index, 1);
-                // } else if (item.bulletBody.collisionWith(ship.shipBody)) {
-                //   enemyBullets.splice(index, 1);
-            }else if ((item.bulletBody.collisionWith(ship.shipBody))) {
-                 bulletContext.clearRect(
-                    item.bulletBody.x,
-                    item.bulletBody.y,
-                    item.bulletBody.width + 20,
-                    item.bulletBody.height + 10
-                );
+
                 enemyBullets.splice(index, 1);
                 ship.shipBody.health -= 10;
             }
@@ -191,13 +189,14 @@ window.addEventListener('load', function() {
 
     function EnemyInteraction(enemies) {
         enemies.forEach(function(item, index) {
-            var offset = 5;
-            var prevEnemyPosition = item.enemyBody.move(dirDeltas[randomGeneratedNumber]);
+            var offset = 5,
+                prevEnemyPosition = item.enemyBody.move(dirDeltas[randomGeneratedNumber]);
 
-            if (CheckBounds(item.enemyBody.x, item.enemyBody.y, item.enemyBody.width, item.enemyBody.height) ||
-                                                                         CheckFriendlyCollision(enemies, item) ||
-                                                                        item.enemyBody.collisionWith(ship.shipBody)) {
-             
+            if (CheckBounds(item.enemyBody.x, item.enemyBody.y,
+                            item.enemyBody.width, item.enemyBody.height) ||
+                CheckFriendlyCollision(enemies, item) ||
+                item.enemyBody.collisionWith(ship.shipBody)) {
+
                 prevEnemyPosition = item.enemyBody.move(dirDeltas[getOpositeMovement(randomGeneratedNumber)]);
             }
 
@@ -211,10 +210,12 @@ window.addEventListener('load', function() {
                 y: item.enemyBody.y
             }, prevEnemyPosition, 2);
 
-            if (getRandomNumber(0, 80) === 0) {
-                enemyBullets.push(createBullet(bulletContext, enemyBulletImg,
-                    item.enemyBody.x + offset,
-                    item.enemyBody.y + offset));
+            if (getRandomNumber(0, 110) === 0) {
+                enemyBullets.push(
+                  createBullet(bulletContext,
+                               enemyBulletImg,
+                               item.enemyBody.x + offset,
+                               item.enemyBody.y + offset));
             }
         });
     }
@@ -230,31 +231,21 @@ window.addEventListener('load', function() {
     function checkIsAlive(player) {
         if (player.shipBody.health <= 0) {
             console.log("Loser");
+            //results.innerHTML("You LOOSE!")
         }
     }
 
     var lastShipLocation = { x: ship.shipBody.x, y: ship.shipBody.y };
-    // var lastEnemyLocation = {x: enemy.enemyBody.x, y: enemy.enemyBody.y};
-    // var lastBulletLocation = {x: bullet.bulletBody.x, y: bullet.bulletBody.y};
+    var firstLayerHealth = 1500;
+    ship.shipBody.health = firstLayerHealth;
+
 
     function gameLoop() {
 
         ship.shipObject
             .render({ x: ship.shipBody.x, y: ship.shipBody.y },
-                lastShipLocation, 2)
+                lastShipLocation, 10)
             .update(true);
-
-        /*    enemy.enemyObject
-              .render(
-                {x: enemy.enemyBody.x, y: enemy.enemyBody.y},
-                lastEnemyLocation, 2)
-              .update(false);
-
-            bullet.bulletObject
-              .render(
-                {x: bullet.bulletBody.x, y: bullet.bulletBody.y},
-                lastBulletLocation, 2)
-              .update(true); */
 
         BulletInteraction(shipBullets, enemies);
 
@@ -265,10 +256,14 @@ window.addEventListener('load', function() {
         EnemyInteraction(enemies);
 
         checkIsAlive(ship);
+
         if (enemies.length === 0) {
             enemyCount += 1;
             GenerateEnemy(enemies, enemyCount);
         }
+
+        playerHealth.innerHTML = ship.shipBody.health;
+        hits.innerHTML = enemies.length;
 
         window.requestAnimationFrame(gameLoop);
     }
@@ -279,16 +274,15 @@ window.addEventListener('load', function() {
         if ((37 <= ev.keyCode) && (ev.keyCode <= 40)) {
             lastShipLocation = ship.shipBody.move(dirDeltas[ev.keyCode - 37]);
             ship.shipObject.update();
-            shipContext.clearRect(lastShipLocation.x - offset , lastShipLocation.y - offset , ship.shipBody.width + 2 * offset, ship.shipBody.height + 2 * offset);
         } else if (ev.keyCode === 32) {
-            //var bullet = createBullet(ship.shipBody.x + offset, myBody.y + offset);
             var shipBullet = createBullet(bulletContext, bulletImg, ship.shipBody.x + 5 * offset, ship.shipBody.y + offset);
+
             shipBullets.push(shipBullet);
         }
     });
 
     document.body.addEventListener('keyup', function(ev) {
-        ship.shipObject.restart();
+         ship.shipObject.restart();
     });
 
     gameLoop();
