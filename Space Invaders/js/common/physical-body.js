@@ -33,9 +33,9 @@ function createPhysicalBody(options) {
     speed: options.speed,
     width: options.width,
     height: options.height,
+    health: 500,
     move: move,
-    collisionWith: collisionWith,
-    health: 1500
+    collisionWith: collisionWith
   };
 
   return physicalBody;
