@@ -6,10 +6,20 @@
       <link rel="stylesheet" href="./css/main.css">
   </head>
   <body>
-      <canvas id="ship-canvas"></canvas>
-      <canvas id="enemy-canvas"></canvas>
-      <canvas id="bullet-canvas"></canvas>
-      <canvas id="background-canvas"></canvas>
+      <div class="canvaces">
+        <canvas id="ship-canvas"></canvas>
+        <canvas id="enemy-canvas"></canvas>
+        <canvas id="bullet-canvas"></canvas>
+        <canvas id="background-canvas"></canvas>
+      </div>
+      <div id="results">
+        <div>
+          Health: <span id="health"></span>
+        </div>
+        <div>
+          Hits: <span id="hits"></span>
+        </div>
+      </div>
 
       <img class="sprite-image" src="./imgs/enemy.png" id="enemy" />
       <img class="sprite-image" src="./imgs/ship.png" id="ship" />
