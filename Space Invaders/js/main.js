@@ -236,9 +236,6 @@ window.addEventListener('load', function() {
     }
 
     var lastShipLocation = { x: ship.shipBody.x, y: ship.shipBody.y };
-    var firstLayerHealth = 1500;
-    ship.shipBody.health = firstLayerHealth;
-
 
     function gameLoop() {
 
