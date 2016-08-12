@@ -1,5 +1,6 @@
 canvas {
     position: absolute;
+    top: 40px;
 }
 
 #bullet-canvas {
@@ -21,4 +22,20 @@ canvas {
 
 .sprite-image {
     display: none;
+}
+
+#results {
+  z-index: 40;
+  width: 1200px;
+  position: absolute;
+  background-color: #1C74FF;
+  border-radius: 6px 6px 0 0;
+  text-align: center;
+  font-size: 30px;
+  font-family: monospace;
+}
+
+#results div {
+  display: inline-block;
+  width: 49%;
 }
